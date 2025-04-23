@@ -1,41 +1,41 @@
-import 'package:flutter/material.dart'; // Aqui estamos importando o Flutter
+import 'package:flutter/material.dart';
 
-/// Tela principal de lista de tarefas
+/// tela principal de lista de tarefas
 class TaskListScreen extends StatefulWidget {
-  const TaskListScreen({super.key}); // Essa linha cria a tela de lista de tarefas, e "super.key" é uma chave que ajuda a identificar a tela
+  const TaskListScreen({super.key});
 
   @override
-  State<TaskListScreen> createState() => _TaskListScreenState(); // estamos dizendo ao Flutter que queremos um lugar para armazenar o "estado" dessa tela (o que vai mudar nela)
+  State<TaskListScreen> createState() => _TaskListScreenState(); // armazena o estado da tela (e o que vai mudar nela)
 }
 
-class _TaskListScreenState extends State<TaskListScreen> with TickerProviderStateMixin {
-  final TextEditingController _tarefaController = TextEditingController(); // Controlador que cuida do que você digita no campo de texto
-  List<Map<String, dynamic>> _tarefasFeitas = []; // Lista de tarefas que já foram feitas
-  List<Map<String, dynamic>> _tarefasAFazer = []; // Lista de tarefas que você ainda precisa fazer
+class _TaskListScreenState extends State<TaskListScreen> with TickerProviderStateMixin { // TickerProviderStateMixin controla animações
+  final TextEditingController _tarefaController = TextEditingController(); // controlador que cuida do que você digita no campo de texto
+  List<Map<String, dynamic>> _tarefasFeitas = []; // lista de tarefas que já foram feitas
+  List<Map<String, dynamic>> _tarefasAFazer = []; // lista de tarefas que você ainda precisa fazer
 
-  late TabController _tabController; //0 controla as abas (como se fossem "páginas" na sua tela)
+  late TabController _tabController; // controla as abas 
 
   @override
   void initState() {
-    _tabController = TabController(length: 2, vsync: this); // configura duas abas: "A FAZER" e "FEITAS"
+    _tabController = TabController(length: 2, vsync: this); // configura duas abas "A FAZER" e "FEITAS"
     super.initState(); // chama o método initState() da classe base State, garante que tudo esteja funcionando direitinho
   }
 
-  // Função que adiciona uma nova tarefa à lista
+  // função que adiciona uma nova tarefa à lista
   void _adicionarTarefa() {
-    if (_tarefaController.text.trim().isNotEmpty) { // Verifica se você escreveu alguma coisa
+    if (_tarefaController.text.trim().isNotEmpty) { // se não estiver vazio chama o setstate
       setState(() {
-        _tarefasAFazer.add({"titulo": _tarefaController.text, "concluida": false}); // Adiciona sua nova tarefa na lista de "A FAZER"
-        _tarefaController.clear(); // Limpa o campo onde você digitou
+        _tarefasAFazer.add({"titulo": _tarefaController.text, "concluida": false}); // adiciona sua nova tarefa na lista de "A FAZER" com seu status de concluida falso
+        _tarefaController.clear(); // limpa o campo onde você digitou
       });
     }
   }
 
-  // Função que move uma tarefa para a lista de "feitas"
+  // função que move uma tarefa para a lista de "feitas"
   void _moverParaFeitas(Map<String, dynamic> tarefa) {
     setState(() {
-      _tarefasAFazer.remove(tarefa); // Remove a tarefa de "A FAZER"
-      _tarefasFeitas.add(tarefa); // Coloca a tarefa na lista de "FEITAS"
+      _tarefasAFazer.remove(tarefa); // remove a tarefa de "A FAZER"
+      _tarefasFeitas.add(tarefa); // coloca a tarefa na lista de "FEITAS"
     });
   }
 
@@ -54,7 +54,7 @@ class _TaskListScreenState extends State<TaskListScreen> with TickerProviderStat
             ListTile(
               leading: Icon(Icons.dashboard), 
               title: Text('Dashboard'),
-              onTap: () => Navigator.pushNamed(context, '/dashboard'), // Vai para a tela do dashboard
+              onTap: () => Navigator.pushNamed(context, '/dashboard'), // vai para a tela do dashboard
             ),
             ListTile(leading: Icon(Icons.settings), title: Text('Configurações')), 
             ListTile(leading: Icon(Icons.help), title: Text('Ajuda')), 
@@ -70,10 +70,10 @@ class _TaskListScreenState extends State<TaskListScreen> with TickerProviderStat
         actions: [Icon(Icons.notifications), SizedBox(width: 16)], 
       ),
 
-      body: Stack(
+      body: Stack( // coloca as children nas bordas
         children: [
           Padding(
-            padding: EdgeInsets.only(top: 60), // Ajusta o conteúdo para que ele não fique embaixo da app bar
+            padding: EdgeInsets.only(top: 60), // ajusta o conteúdo para que ele não fique embaixo da app bar
             child: TabBarView(
               controller: _tabController,
               children: [
@@ -82,25 +82,25 @@ class _TaskListScreenState extends State<TaskListScreen> with TickerProviderStat
                   padding: EdgeInsets.all(8.0),
                   child: Column(
                     children: [
-                      // CAMPO DE TEXTO onde você digita uma nova tarefa
+                      // campo de texto
                       TextField(
                         controller: _tarefaController,
                         decoration: InputDecoration(
                           labelText: "Digite uma tarefa",
-                          border: OutlineInputBorder(), // Borda ao redor do campo
+                          border: OutlineInputBorder(), 
                           focusedBorder: OutlineInputBorder(
-                            borderSide: BorderSide(color: Colors.teal), // Cor da borda quando você está digitando
+                            borderSide: BorderSide(color: Colors.teal), 
                           ),
                         ),
                       ),
-                      SizedBox(height: 12), // Dá um espacinho entre o campo de texto e a lista de tarefas
+                      SizedBox(height: 12), // espacinho entre o campo de texto e a lista de tarefas
 
                       // LISTA de tarefas a fazer
                       Expanded(
                         child: ListView.builder(
-                          itemCount: _tarefasAFazer.length, // Quantas tarefas há para exibir
+                          itemCount: _tarefasAFazer.length, // quantas tarefas há para exibir
                           itemBuilder: (context, index) {
-                            final tarefa = _tarefasAFazer[index]; // Pega a tarefa que está na posição "index"
+                            final tarefa = _tarefasAFazer[index]; // pega a tarefa que ta na posição "index"
                             return Container(
                               margin: EdgeInsets.symmetric(vertical: 6), 
                               padding: EdgeInsets.symmetric(horizontal: 16, vertical: 12),
@@ -118,8 +118,8 @@ class _TaskListScreenState extends State<TaskListScreen> with TickerProviderStat
                                     ),
                                   ),
                                   IconButton(
-                                    icon: Icon(Icons.check, color: Colors.teal), // Ícone para marcar como feita
-                                    onPressed: () => _moverParaFeitas(tarefa), // Mover a tarefa para "feitas"
+                                    icon: Icon(Icons.check, color: Colors.teal), 
+                                    onPressed: () => _moverParaFeitas(tarefa), // mover a tarefa para "feitas"
                                   ),
                                 ],
                               ),
@@ -135,9 +135,9 @@ class _TaskListScreenState extends State<TaskListScreen> with TickerProviderStat
                 Padding(
                   padding: EdgeInsets.all(8.0),
                   child: ListView.builder(
-                    itemCount: _tarefasFeitas.length, // Conta quantas tarefas já foram feitas
+                    itemCount: _tarefasFeitas.length, // conta quantas tarefas já foram feitas
                     itemBuilder: (context, index) {
-                      final tarefa = _tarefasFeitas[index]; // Pega a tarefa concluída
+                      final tarefa = _tarefasFeitas[index]; // pega a tarefa concluída
                       return Container(
                         margin: EdgeInsets.symmetric(vertical: 6),
                         padding: EdgeInsets.symmetric(horizontal: 16, vertical: 12),
@@ -153,7 +153,7 @@ class _TaskListScreenState extends State<TaskListScreen> with TickerProviderStat
                               child: Text(
                                 tarefa["titulo"],
                                 style: TextStyle(
-                                  decoration: TextDecoration.lineThrough, // Risca o texto para mostrar que está feito
+                                  decoration: TextDecoration.lineThrough, // risca o texto para mostrar que está feito
                                   color: Colors.grey,
                                   fontSize: 16,
                                 ),
@@ -169,7 +169,7 @@ class _TaskListScreenState extends State<TaskListScreen> with TickerProviderStat
             ),
           ),
 
-          // Abas que ficam fixas no topo da tela
+          // abas que ficam fixas no topo da tela
           Positioned(
             top: 8,
             left: 16,
@@ -192,8 +192,8 @@ class _TaskListScreenState extends State<TaskListScreen> with TickerProviderStat
                 labelStyle: TextStyle(fontSize: 16),
                 unselectedLabelStyle: TextStyle(fontSize: 14),
                 tabs: [
-                  Tab(text: 'A FAZER'), // Aba para tarefas pendentes
-                  Tab(text: 'FEITAS'), // Aba para tarefas já concluídas
+                  Tab(text: 'A FAZER'), // aba para tarefas pendentes
+                  Tab(text: 'FEITAS'), // aba para tarefas já concluídas
                 ],
               ),
             ),
@@ -203,7 +203,7 @@ class _TaskListScreenState extends State<TaskListScreen> with TickerProviderStat
 
       // BOTÃO FLUTUANTE (botão redondo para adicionar uma nova tarefa)
       floatingActionButton: FloatingActionButton(
-        onPressed: _adicionarTarefa, // Chama a função para adicionar uma nova tarefa
+        onPressed: _adicionarTarefa, 
         backgroundColor: Colors.teal,
         foregroundColor: Colors.white,
         child: Icon(Icons.add), // Ícone de adição (+)
@@ -211,17 +211,17 @@ class _TaskListScreenState extends State<TaskListScreen> with TickerProviderStat
 
       // BARRA DE NAVEGAÇÃO INFERIOR (com ícones para tarefas e configurações)
       bottomNavigationBar: BottomNavigationBar(
-        currentIndex: 0, // Índice da opção selecionada
+        currentIndex: 0, // índice da opção selecionada
         selectedItemColor: Colors.white, 
         unselectedItemColor: Colors.white70, 
         backgroundColor: Colors.teal, 
         items: [
           BottomNavigationBarItem(
-            icon: Icon(Icons.list), // Ícone de lista de tarefas
+            icon: Icon(Icons.list), 
             label: 'Tarefas',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.settings), // Ícone de configurações
+            icon: Icon(Icons.settings), 
             label: 'Configurações',
           ),
         ],

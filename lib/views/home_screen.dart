@@ -28,11 +28,16 @@ class _TelaCadastroState extends State<TelaLogin> {
         _emailController.text.isNotEmpty &&
         _senhaController.text.isNotEmpty) {
       
-      //mostra no terminal(?)
       print("Cadastro Enviado:");
       print("Nome: ${_nomeController.text}");
       print("Email: ${_emailController.text}");
       print("Senha: ${_senhaController.text}");
+      
+      
+    // Limpa os campos após o envio
+    _nomeController.clear();
+    _emailController.clear();
+    _senhaController.clear();
       
       //mssg de sucesso
       //scaffoldMessenger usa o showSnackBar para que ele apareça que nem uma notificação

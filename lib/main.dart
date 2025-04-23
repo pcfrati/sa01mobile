@@ -19,7 +19,7 @@ class MyApp extends StatelessWidget {
       ),
       initialRoute: '/',
       routes: {
-        '/': (context) => const HomeScreen(),
+        '/': (context) => const TelaLogin(),
         '/tasks': (context) => const TaskListScreen(),
         '/dashboard': (context) => const DashboardScreen(),
       },

@@ -56,7 +56,7 @@ class _TelaCadastroState extends State<TelaLogin> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      //
+      //mini menu que aparece na parte esquerda da tela
       drawer: Drawer(
         child: ListView(
           padding: EdgeInsets.zero,

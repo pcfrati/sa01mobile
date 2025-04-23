@@ -66,6 +66,7 @@ class _TaskListScreenState extends State<TaskListScreen> with TickerProviderStat
         ),
       ),
       appBar: AppBar(
+        iconTheme: IconThemeData(color: Colors.white),
         backgroundColor: Colors.teal,
         title: const Text("HACHE", style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
         actions: const [

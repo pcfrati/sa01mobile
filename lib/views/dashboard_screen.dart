@@ -1,24 +1,11 @@
 import 'package:flutter/material.dart';
 
-void main() {
-  runApp(MyApp()); 
-}
-
-// Um widget que nunca muda (StatelessWidget)
-class MyApp extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      home: DashboardScreen(), // Tela inicial
-      debugShowCheckedModeBanner: false, // Tira aquele bannerzinho "DEBUG" do canto
-    );
-  }
-}
-
-// Tela principal do app
+// Tela principal do dashboard
 class DashboardScreen extends StatelessWidget {
-  // Define uma cor personalizada pros cartões 
-  final Color cardColor = Color(0xFF35635e); 
+  const DashboardScreen({super.key});
+
+  // Define uma cor personalizada pros cartões
+  final Color cardColor = const Color(0xFF35635e);
   final Color selectedColor = Colors.white; // Branco para itens selecionados (ícones, textos, etc)
   final Color unselectedColor = Colors.white70; // Branco meio transparente pros não selecionados
 
@@ -26,6 +13,7 @@ class DashboardScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       // Scaffold é a estrutura básica de uma tela: appbar, corpo, menu, etc.
+      
       drawer: Drawer(
         // Drawer = Menu lateral
         child: ListView(
@@ -58,9 +46,12 @@ class DashboardScreen extends StatelessWidget {
 
       // Barra superior da tela (azul/verde com o título)
       appBar: AppBar(
-        iconTheme: IconThemeData(color: Colors.white),
+        iconTheme: const IconThemeData(color: Colors.white),
         backgroundColor: Colors.teal,
-        title: const Text("HECHO", style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
+        title: const Text(
+          "HECHO",
+          style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+        ),
         actions: const [
           Icon(Icons.notifications, color: Colors.white), // Ícone de notificação
           SizedBox(width: 16),
@@ -80,7 +71,7 @@ class DashboardScreen extends StatelessWidget {
                 color: cardColor,
                 borderRadius: BorderRadius.circular(8), // Arredondamento das bordas
               ),
-              child: Center(
+              child: const Center(
                 child: Text(
                   'Bem-vindo(a), (usuário)\nTotal de tarefas: **', // Texto principal
                   textAlign: TextAlign.center, // Centralizado
@@ -94,90 +85,10 @@ class DashboardScreen extends StatelessWidget {
             ),
 
             // Cartão com número de pendências
-            Container(
-              height: 120,
-              margin: const EdgeInsets.all(16),
-              padding: const EdgeInsets.only(left:30),
-              decoration: BoxDecoration(
-                color: cardColor,
-                borderRadius: BorderRadius.circular(8),
-              ),
-              child: Align(
-                alignment: Alignment.centerLeft, // Alinha todo o conteúdo à esquerda
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center, // Centraliza verticalmente
-                  crossAxisAlignment: CrossAxisAlignment.start, // Alinha os filhos à esquerda
-                  children: [
-                    Text(
-                      '20', // Número
-                      style: TextStyle(
-                        fontSize: 40,
-                        color: Colors.greenAccent,
-                        fontWeight: FontWeight.bold,
-                        shadows: [
-                          Shadow(
-                            offset: Offset(2, 2), // Sombra deslocada
-                            blurRadius: 2,
-                            color: Colors.black,
-                          ),
-                        ],
-                      ),
-                    ),
-                    SizedBox(height: 8), // Espaço entre textos
-                    Text(
-                      'PENDÊNCIAS', // Descrição
-                      style: TextStyle(
-                        fontSize: 16,
-                        color: Colors.white,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ),
+            _buildCard('20', 'PENDÊNCIAS'),
 
             // Cartão com número de urgentes
-            Container(
-              height: 140,
-              margin: const EdgeInsets.all(16),
-              padding: const EdgeInsets.only(left:30),
-              decoration: BoxDecoration(
-                color: cardColor,
-                borderRadius: BorderRadius.circular(8),
-              ),
-              child: Align(
-                alignment: Alignment.centerLeft,
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      '4',
-                      style: TextStyle(
-                        fontSize: 40,
-                        color: Colors.greenAccent,
-                        fontWeight: FontWeight.bold,
-                        shadows: [
-                          Shadow(
-                            offset: Offset(2, 2),
-                            blurRadius: 2,
-                            color: Colors.black,
-                          ),
-                        ],
-                      ),
-                    ),
-                    SizedBox(height: 8),
-                    Text(
-                      'URGENTES',
-                      style: TextStyle(
-                        fontSize: 16,
-                        color: Colors.white70,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ),
+            _buildCard('4', 'URGENTES', urgent: true),
 
             // Dois blocos lado a lado: TODAS e CONCLUÍDAS
             Padding(
@@ -185,47 +96,9 @@ class DashboardScreen extends StatelessWidget {
               child: Row(
                 children: [
                   // Primeira metade
-                  Expanded(
-                    child: Container(
-                      height: 100,
-                      margin: const EdgeInsets.only(right: 8),
-                      decoration: BoxDecoration(
-                        color: cardColor,
-                        borderRadius: BorderRadius.circular(8),
-                      ),
-                      child: Center(
-                        child: Text(
-                          'TODAS',
-                          style: TextStyle(
-                            fontSize: 20,
-                            color: Colors.white,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
+                  Expanded(child: _buildHalfCard('TODAS')),
                   // Segunda metade
-                  Expanded(
-                    child: Container(
-                      height: 100,
-                      margin: const EdgeInsets.only(left: 8),
-                      decoration: BoxDecoration(
-                        color: cardColor,
-                        borderRadius: BorderRadius.circular(8),
-                      ),
-                      child: Center(
-                        child: Text(
-                          'CONCLUÍDAS',
-                          style: TextStyle(
-                            fontSize: 20,
-                            color: Colors.white,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
+                  Expanded(child: _buildHalfCard('CONCLUÍDAS')),
                 ],
               ),
             ),
@@ -236,8 +109,8 @@ class DashboardScreen extends StatelessWidget {
       // Barra de navegação inferior
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: 0, // O item selecionado
-        selectedItemColor: Colors.white,
-        unselectedItemColor: Colors.white70,
+        selectedItemColor: selectedColor,
+        unselectedItemColor: unselectedColor,
         backgroundColor: Colors.teal,
         items: const [
           BottomNavigationBarItem(
@@ -252,6 +125,71 @@ class DashboardScreen extends StatelessWidget {
       ),
     );
   }
+
+  // Método auxiliar para criar os cartões verticais (pendências e urgentes)
+  Widget _buildCard(String number, String label, {bool urgent = false}) {
+    return Container(
+      height: urgent ? 140 : 120,
+      margin: const EdgeInsets.all(16),
+      padding: const EdgeInsets.only(left: 30),
+      decoration: BoxDecoration(
+        color: cardColor,
+        borderRadius: BorderRadius.circular(8),
+      ),
+      child: Align(
+        alignment: Alignment.centerLeft, // Alinha todo o conteúdo à esquerda
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center, // Centraliza verticalmente
+          crossAxisAlignment: CrossAxisAlignment.start, // Alinha os filhos à esquerda
+          children: [
+            Text(
+              number, // Número
+              style: const TextStyle(
+                fontSize: 40,
+                color: Colors.greenAccent,
+                fontWeight: FontWeight.bold,
+                shadows: [
+                  Shadow(
+                    offset: Offset(2, 2), // Sombra deslocada
+                    blurRadius: 2,
+                    color: Colors.black,
+                  ),
+                ],
+              ),
+            ),
+            const SizedBox(height: 8), // Espaço entre textos
+            Text(
+              label, // Descrição
+              style: TextStyle(
+                fontSize: 16,
+                color: urgent ? Colors.white70 : Colors.white,
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  // Método auxiliar para os cartões horizontais lado a lado (Todas / Concluídas)
+  Widget _buildHalfCard(String label) {
+    return Container(
+      height: 100,
+      margin: const EdgeInsets.symmetric(horizontal: 8),
+      decoration: BoxDecoration(
+        color: cardColor,
+        borderRadius: BorderRadius.circular(8),
+      ),
+      child: Center(
+        child: Text(
+          label,
+          style: const TextStyle(
+            fontSize: 20,
+            color: Colors.white,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+      ),
+    );
+  }
 }
-
-

@@ -20,6 +20,8 @@ class _TelaCadastroState extends State<TelaLogin> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _senhaController = TextEditingController();
 
+  get bottomNavigationBar => null;
+
   void _enviarCadastro() {
     //possivel enviar somente se tem algo escrito
     if (_nomeController.text.isNotEmpty &&
@@ -56,7 +58,7 @@ class _TelaCadastroState extends State<TelaLogin> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      //mini menu que aparece na parte esquerda da tela
+      //
       drawer: Drawer(
         child: ListView(
           padding: EdgeInsets.zero,
@@ -151,10 +153,26 @@ class _TelaCadastroState extends State<TelaLogin> {
                   ),
                   child: const Text("Enviar Cadastro"),
                 ),
-              )
-            ],
+      ),
+      ],
           ),
         ),
+      bottomNavigationBar: BottomNavigationBar(
+        currentIndex: 0,
+        selectedItemColor: Colors.white,
+        unselectedItemColor: Colors.white70,
+        backgroundColor: Colors.teal,
+        items: const [
+          BottomNavigationBarItem(
+            icon: Icon(Icons.list),
+            label: 'Tarefas',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.settings),
+            label: 'Configurações',
+          ),
+        ],
+              )
     );
   }
 }

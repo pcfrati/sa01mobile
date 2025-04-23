@@ -1,5 +1,6 @@
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart'; // Importa os widgets do Flutter (UI)
 
+/// Tela de lista de tarefas
 class TaskListScreen extends StatefulWidget {
   const TaskListScreen({super.key});
 
@@ -8,37 +9,40 @@ class TaskListScreen extends StatefulWidget {
 }
 
 class _TaskListScreenState extends State<TaskListScreen> with TickerProviderStateMixin {
-  final TextEditingController _tarefaController = TextEditingController();
-  List<Map<String, dynamic>> _tarefasFeitas = [];
-  List<Map<String, dynamic>> _tarefasAFazer = [];
+  final TextEditingController _tarefaController = TextEditingController(); // Controla o campo de texto
+  List<Map<String, dynamic>> _tarefasFeitas = []; // Lista de tarefas concluídas
+  List<Map<String, dynamic>> _tarefasAFazer = []; // Lista de tarefas a fazer
 
-  late TabController _tabController;
+  late TabController _tabController; // Controlador das abas
 
   @override
   void initState() {
-    _tabController = TabController(length: 2, vsync: this);
-    super.initState(); 
+    _tabController = TabController(length: 2, vsync: this); // Define 2 abas: A FAZER / FEITAS
+    super.initState(); // Chama o init padrão
   }
 
+  // Adiciona uma nova tarefa
   void _adicionarTarefa() {
     if (_tarefaController.text.trim().isNotEmpty) {
       setState(() {
-        _tarefasAFazer.add({"titulo": _tarefaController.text, "concluida": false});
-        _tarefaController.clear();
+        _tarefasAFazer.add({"titulo": _tarefaController.text, "concluida": false}); // Adiciona na lista
+        _tarefaController.clear(); // Limpa o campo
       });
     }
   }
 
+  // Move tarefa para "feitas"
   void _moverParaFeitas(Map<String, dynamic> tarefa) {
     setState(() {
-      _tarefasAFazer.remove(tarefa);
-      _tarefasFeitas.add(tarefa);
+      _tarefasAFazer.remove(tarefa); // Remove de "a fazer"
+      _tarefasFeitas.add(tarefa); // Adiciona em "feitas"
     });
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      // MENU LATERAL
       drawer: Drawer(
         child: ListView(
           padding: EdgeInsets.zero,
@@ -48,63 +52,60 @@ class _TaskListScreenState extends State<TaskListScreen> with TickerProviderStat
               child: Text('Menu', style: TextStyle(color: Colors.white, fontSize: 24)),
             ),
             ListTile(
-              leading: const Icon(Icons.dashboard),
-              title: const Text('Dashboard'),
-              onTap: () {
-                Navigator.pushNamed(context, '/dashboard');
-              },
+              leading: Icon(Icons.dashboard),
+              title: Text('Dashboard'),
+              onTap: () => Navigator.pushNamed(context, '/dashboard'),
             ),
-            const ListTile(
-              leading: Icon(Icons.settings),
-              title: Text('Configurações'),
-            ),
-            const ListTile(
-              leading: Icon(Icons.help),
-              title: Text('Ajuda'),
-            ),
+            ListTile(leading: Icon(Icons.settings), title: Text('Configurações')),
+            ListTile(leading: Icon(Icons.help), title: Text('Ajuda')),
           ],
         ),
       ),
+
+      // APPBAR
       appBar: AppBar(
         iconTheme: IconThemeData(color: Colors.white),
         backgroundColor: Colors.teal,
-        title: const Text("HACHE", style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
-        actions: const [
-          Icon(Icons.notifications),
-          SizedBox(width: 16),
-        ],
+        title: Text("HACHE", style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
+        actions: [Icon(Icons.notifications), SizedBox(width: 16)],
       ),
+
+      // CORPO DA TELA
       body: Stack(
         children: [
+          // CONTEÚDO DAS ABAS
           Padding(
-            padding: const EdgeInsets.only(top: 60),
+            padding: EdgeInsets.only(top: 60),
             child: TabBarView(
               controller: _tabController,
               children: [
-                // Tarefas a fazer
+                // ABA: A FAZER
                 Padding(
-                  padding: const EdgeInsets.all(8.0),
+                  padding: EdgeInsets.all(8.0),
                   child: Column(
                     children: [
+                      // CAMPO DE TEXTO
                       TextField(
                         controller: _tarefaController,
-                        decoration: const InputDecoration(
+                        decoration: InputDecoration(
                           labelText: "Digite uma tarefa",
                           border: OutlineInputBorder(),
                           focusedBorder: OutlineInputBorder(
-                            borderSide: BorderSide(color: Colors.teal), // Cor quando focado
+                            borderSide: BorderSide(color: Colors.teal),
                           ),
                         ),
                       ),
-                      const SizedBox(height: 12),
+                      SizedBox(height: 12),
+
+                      // LISTA DE TAREFAS A FAZER
                       Expanded(
                         child: ListView.builder(
                           itemCount: _tarefasAFazer.length,
                           itemBuilder: (context, index) {
                             final tarefa = _tarefasAFazer[index];
                             return Container(
-                              margin: const EdgeInsets.symmetric(vertical: 6),
-                              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                              margin: EdgeInsets.symmetric(vertical: 6),
+                              padding: EdgeInsets.symmetric(horizontal: 16, vertical: 12),
                               decoration: BoxDecoration(
                                 color: Colors.teal.shade50,
                                 borderRadius: BorderRadius.circular(30),
@@ -115,14 +116,11 @@ class _TaskListScreenState extends State<TaskListScreen> with TickerProviderStat
                                   Expanded(
                                     child: Text(
                                       tarefa["titulo"],
-                                      style: const TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 16,
-                                      ),
+                                      style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
                                     ),
                                   ),
                                   IconButton(
-                                    icon: const Icon(Icons.check, color: Colors.teal),
+                                    icon: Icon(Icons.check, color: Colors.teal),
                                     onPressed: () => _moverParaFeitas(tarefa),
                                   ),
                                 ],
@@ -134,28 +132,29 @@ class _TaskListScreenState extends State<TaskListScreen> with TickerProviderStat
                     ],
                   ),
                 ),
-                // Tarefas feitas
+
+                // ABA: FEITAS
                 Padding(
-                  padding: const EdgeInsets.all(8.0),
+                  padding: EdgeInsets.all(8.0),
                   child: ListView.builder(
                     itemCount: _tarefasFeitas.length,
                     itemBuilder: (context, index) {
                       final tarefa = _tarefasFeitas[index];
                       return Container(
-                        margin: const EdgeInsets.symmetric(vertical: 6),
-                        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                        margin: EdgeInsets.symmetric(vertical: 6),
+                        padding: EdgeInsets.symmetric(horizontal: 16, vertical: 12),
                         decoration: BoxDecoration(
                           color: Colors.grey.shade200,
                           borderRadius: BorderRadius.circular(30),
                         ),
                         child: Row(
                           children: [
-                            const Icon(Icons.done_all, color: Colors.grey),
-                            const SizedBox(width: 12),
+                            Icon(Icons.done_all, color: Colors.grey),
+                            SizedBox(width: 12),
                             Expanded(
                               child: Text(
                                 tarefa["titulo"],
-                                style: const TextStyle(
+                                style: TextStyle(
                                   decoration: TextDecoration.lineThrough,
                                   color: Colors.grey,
                                   fontSize: 16,
@@ -171,6 +170,8 @@ class _TaskListScreenState extends State<TaskListScreen> with TickerProviderStat
               ],
             ),
           ),
+
+          // TABBAR FIXA NO TOPO
           Positioned(
             top: 8,
             left: 16,
@@ -187,12 +188,12 @@ class _TaskListScreenState extends State<TaskListScreen> with TickerProviderStat
                   color: Colors.teal,
                 ),
                 indicatorSize: TabBarIndicatorSize.tab,
-                indicatorPadding: const EdgeInsets.symmetric(vertical: 6),
+                indicatorPadding: EdgeInsets.symmetric(vertical: 6),
                 labelColor: Colors.white,
                 unselectedLabelColor: Colors.black,
-                labelStyle: const TextStyle(fontSize: 16),
-                unselectedLabelStyle: const TextStyle(fontSize: 14),
-                tabs: const [
+                labelStyle: TextStyle(fontSize: 16),
+                unselectedLabelStyle: TextStyle(fontSize: 14),
+                tabs: [
                   Tab(text: 'A FAZER'),
                   Tab(text: 'FEITAS'),
                 ],
@@ -201,19 +202,22 @@ class _TaskListScreenState extends State<TaskListScreen> with TickerProviderStat
           ),
         ],
       ),
+
+      // BOTÃO FLUTUANTE (Adicionar tarefa)
       floatingActionButton: FloatingActionButton(
         onPressed: _adicionarTarefa,
         backgroundColor: Colors.teal,
-        foregroundColor: Colors.white, // ícone branco
-        child: const Icon(Icons.add),
+        foregroundColor: Colors.white,
+        child: Icon(Icons.add),
       ),
 
+      // BARRA DE NAVEGAÇÃO INFERIOR
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: 0,
         selectedItemColor: Colors.white,
         unselectedItemColor: Colors.white70,
         backgroundColor: Colors.teal,
-        items: const [
+        items: [
           BottomNavigationBarItem(
             icon: Icon(Icons.list),
             label: 'Tarefas',

@@ -1,21 +1,22 @@
 import 'package:flutter/material.dart';
 
 // Tela principal do dashboard
+// StatelessWidget: não guarda estados, apenas constrói a interface
 class DashboardScreen extends StatelessWidget {
   const DashboardScreen({super.key});
 
-  // Define uma cor personalizada pros cartões
+  // Cores personalizadas para manter consistência visual
   final Color cardColor = const Color(0xFF35635e);
-  final Color selectedColor = Colors.white; // Branco para itens selecionados (ícones, textos, etc)
-  final Color unselectedColor = Colors.white70; // Branco meio transparente pros não selecionados
+  final Color selectedColor = Colors.white;
+  final Color unselectedColor = Colors.white70;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // Scaffold é a estrutura básica de uma tela: appbar, corpo, menu, etc.
-      
+      // Scaffold: estrutura principal da tela (appbar, drawer, corpo e bottom navigation)
+
       drawer: Drawer(
-        // Drawer = Menu lateral
+        // Drawer: menu lateral para navegação
         child: ListView(
           padding: EdgeInsets.zero,
           children: [
@@ -29,7 +30,7 @@ class DashboardScreen extends StatelessWidget {
               leading: const Icon(Icons.assignment_turned_in),
               title: const Text('Tarefas'),
               onTap: () {
-                Navigator.pushNamed(context, '/tasks'); // Leva para a página da lista de tarefas
+                Navigator.pushNamed(context, '/tasks'); // Navega para a página de tarefas
               },
             ),
             const ListTile(
@@ -44,8 +45,8 @@ class DashboardScreen extends StatelessWidget {
         ),
       ),
 
-      // Barra superior da tela (azul/verde com o título)
       appBar: AppBar(
+        // AppBar: barra superior com título e ações
         iconTheme: const IconThemeData(color: Colors.white),
         backgroundColor: Colors.teal,
         title: const Text(
@@ -53,28 +54,28 @@ class DashboardScreen extends StatelessWidget {
           style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
         ),
         actions: const [
-          Icon(Icons.notifications, color: Colors.white), // Ícone de notificação
+          Icon(Icons.notifications, color: Colors.white),
           SizedBox(width: 16),
         ],
       ),
 
-      // Corpo da tela, com rolagem se precisar
       body: SingleChildScrollView(
+        // SingleChildScrollView: permite rolagem quando o conteúdo ultrapassa o ecrã
         child: Column(
           children: [
-            // Cartão de boas-vindas
+            // Cartão de boas-vindas ao utilizador
             Container(
               height: 100,
-              margin: const EdgeInsets.all(16), // Espaço fora do container
-              padding: const EdgeInsets.all(12), // Espaço dentro do container
+              margin: const EdgeInsets.all(16),
+              padding: const EdgeInsets.all(12),
               decoration: BoxDecoration(
                 color: cardColor,
-                borderRadius: BorderRadius.circular(8), // Arredondamento das bordas
+                borderRadius: BorderRadius.circular(8),
               ),
               child: const Center(
                 child: Text(
-                  'Bem-vindo(a), (usuário)\nTotal de tarefas: **', // Texto principal
-                  textAlign: TextAlign.center, // Centralizado
+                  'Bem-vindo(a), (usuário)\nTotal de tarefas: **',
+                  textAlign: TextAlign.center,
                   style: TextStyle(
                     fontSize: 18,
                     color: Colors.white,
@@ -84,20 +85,16 @@ class DashboardScreen extends StatelessWidget {
               ),
             ),
 
-            // Cartão com número de pendências
+            // Cartões de estatísticas: Pendências, Urgentes
             _buildCard('20', 'PENDÊNCIAS'),
-
-            // Cartão com número de urgentes
             _buildCard('4', 'URGENTES', urgent: true),
 
-            // Dois blocos lado a lado: TODAS e CONCLUÍDAS
+            // Cartões horizontais: Todas e Concluídas
             Padding(
               padding: const EdgeInsets.all(16),
               child: Row(
                 children: [
-                  // Primeira metade
                   Expanded(child: _buildHalfCard('TODAS')),
-                  // Segunda metade
                   Expanded(child: _buildHalfCard('CONCLUÍDAS')),
                 ],
               ),
@@ -106,9 +103,9 @@ class DashboardScreen extends StatelessWidget {
         ),
       ),
 
-      // Barra de navegação inferior
       bottomNavigationBar: BottomNavigationBar(
-        currentIndex: 0, // O item selecionado
+        // BottomNavigationBar: navegação entre as principais seções
+        currentIndex: 0,
         selectedItemColor: selectedColor,
         unselectedItemColor: unselectedColor,
         backgroundColor: Colors.teal,
@@ -126,7 +123,7 @@ class DashboardScreen extends StatelessWidget {
     );
   }
 
-  // Método auxiliar para criar os cartões verticais (pendências e urgentes)
+  // Método auxiliar: cria cartões verticais (Pendências, Urgentes)
   Widget _buildCard(String number, String label, {bool urgent = false}) {
     return Container(
       height: urgent ? 140 : 120,
@@ -137,29 +134,29 @@ class DashboardScreen extends StatelessWidget {
         borderRadius: BorderRadius.circular(8),
       ),
       child: Align(
-        alignment: Alignment.centerLeft, // Alinha todo o conteúdo à esquerda
+        alignment: Alignment.centerLeft,
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.center, // Centraliza verticalmente
-          crossAxisAlignment: CrossAxisAlignment.start, // Alinha os filhos à esquerda
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              number, // Número
+              number,
               style: const TextStyle(
                 fontSize: 40,
                 color: Colors.greenAccent,
                 fontWeight: FontWeight.bold,
                 shadows: [
                   Shadow(
-                    offset: Offset(2, 2), // Sombra deslocada
+                    offset: Offset(2, 2),
                     blurRadius: 2,
                     color: Colors.black,
                   ),
                 ],
               ),
             ),
-            const SizedBox(height: 8), // Espaço entre textos
+            const SizedBox(height: 8),
             Text(
-              label, // Descrição
+              label,
               style: TextStyle(
                 fontSize: 16,
                 color: urgent ? Colors.white70 : Colors.white,
@@ -171,7 +168,7 @@ class DashboardScreen extends StatelessWidget {
     );
   }
 
-  // Método auxiliar para os cartões horizontais lado a lado (Todas / Concluídas)
+  // Método auxiliar: cria cartões horizontais (Todas, Concluídas)
   Widget _buildHalfCard(String label) {
     return Container(
       height: 100,

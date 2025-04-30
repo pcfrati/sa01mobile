@@ -1,34 +1,51 @@
 import 'package:flutter/material.dart';
 
+void main() {
+  runApp(const MyApp());
+}
+
+class MyApp extends StatelessWidget {
+  const MyApp({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      title: 'HECHO',
+      theme: ThemeData(
+        primarySwatch: Colors.teal,
+      ),
+      home: const TelaLogin(),
+      routes: {
+        '/tasks': (context) => const TasksScreen(),
+        '/dashboard': (context) => const DashboardScreen(),
+      },
+    );
+  }
+}
+
 class TelaLogin extends StatefulWidget {
   const TelaLogin({super.key});
 
   @override
-  State<TelaLogin> createState() => _TelaCadastroState();
+  State<TelaLogin> createState() => _TelaLoginState();
 }
 
-class _TelaCadastroState extends State<TelaLogin> {
+class _TelaLoginState extends State<TelaLogin> {
   final TextEditingController _nomeController = TextEditingController();
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _senhaController = TextEditingController();
 
-  void _enviarCadastro() {
+  void _validarEEntrar() {
     if (_nomeController.text.isNotEmpty &&
         _emailController.text.isNotEmpty &&
         _senhaController.text.isNotEmpty) {
-      print("Cadastro Enviado:");
-      print("Nome: ${_nomeController.text}");
-      print("Email: ${_emailController.text}");
-      print("Senha: ${_senhaController.text}");
-
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
-          content: Text('Cadastro enviado com sucesso!'),
+          content: Text('Login realizado com sucesso!'),
           backgroundColor: Colors.green,
         ),
       );
 
-      // Navega para a tela de tarefas após o sucesso
       Future.delayed(const Duration(seconds: 1), () {
         Navigator.pushReplacementNamed(context, '/tasks');
       });
@@ -123,21 +140,7 @@ class _TelaCadastroState extends State<TelaLogin> {
             SizedBox(
               width: double.infinity,
               child: ElevatedButton(
-                onPressed: _enviarCadastro,
-                style: ButtonStyle(
-                  backgroundColor: MaterialStateProperty.all<Color>(Colors.teal),
-                  foregroundColor: MaterialStateProperty.all<Color>(Colors.white),
-                ),
-                child: const Text("Enviar Cadastro"),
-              ),
-            ),
-            const SizedBox(height: 10.0),
-            SizedBox(
-              width: double.infinity,
-              child: ElevatedButton(
-                onPressed: () {
-                  Navigator.pushReplacementNamed(context, '/tasks');
-                },
+                onPressed: _validarEEntrar,
                 style: ButtonStyle(
                   backgroundColor: MaterialStateProperty.all<Color>(Colors.teal.shade700),
                   foregroundColor: MaterialStateProperty.all<Color>(Colors.white),
@@ -163,6 +166,38 @@ class _TelaCadastroState extends State<TelaLogin> {
             label: 'Configurações',
           ),
         ],
+      ),
+    );
+  }
+}
+
+class TasksScreen extends StatelessWidget {
+  const TasksScreen({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Tarefas'),
+      ),
+      body: const Center(
+        child: Text('Tela de Tarefas'),
+      ),
+    );
+  }
+}
+
+class DashboardScreen extends StatelessWidget {
+  const DashboardScreen({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Dashboard'),
+      ),
+      body: const Center(
+        child: Text('Tela de Dashboard'),
       ),
     );
   }
